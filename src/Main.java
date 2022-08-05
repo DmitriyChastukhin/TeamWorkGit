@@ -16,14 +16,13 @@ public class Main {
         }
 
         while (true) {
-            System.out.println("Веди номер товара и его количество (через пробел); " +
+            System.out.println("Введи номер товара и его количество (через пробел); " +
                     "для подсчета результатов и выхода набери end.");
             String input = scanner.nextLine();
             if ("end".equals(input)) {
                 break;
             }
-            String[] choice = new String[0];
-            choice = input.split(" ");
+            String[] choice = input.split(" ");
 
             //TODO если массив не из двух чисел:
             if (choice.length != 2) {
@@ -43,18 +42,26 @@ public class Main {
             //TODO если введённые числа не подходят по условиям:
             if (cellNum < 0 || cellNum >= shop.length) {
                 System.out.println("нет товара под таким номером");
-                continue;
-            }
-            if (productCount < 0) {
-                System.out.println("кол-во товара меньше ноля - недопустимо");
-                continue;
-            }
-            purchases[cellNum] += productCount;
 
+            } else if (productCount < 0) {
+                System.out.println("Товар " + shop[cellNum] + " в корзине будет уменьшен на " + -productCount + " шт.");
+                if (purchases[cellNum] + productCount <= 0) {
+                    purchases[cellNum] = 0;
+                } else {
+                    purchases[cellNum] = purchases[cellNum] + productCount;
+                }
+            } else if (productCount == 0) {
+                System.out.println("Следующий товар был удален из корзины: " + shop[cellNum]);
+                purchases[cellNum] = 0;
+            } else {
+                purchases[cellNum] += productCount;
+
+                System.out.println("В вашей корзине: " + shop[cellNum] + ", " + productCount + " шт");
+            }
         }
-        System.out.println("В вашей корзине: ");
+
         for (int i = 0; i < shop.length; i++) {
-            if (purchases[i] > 0) {
+            if (purchases[i] != 0) {
                 System.out.println(shop[i] + " по " + prices[i] + " руб. - "
                         + purchases[i] + " шт. (на " + (purchases[i] * prices[i]) + " руб.)");
                 sumProduct += (purchases[i] * prices[i]);
