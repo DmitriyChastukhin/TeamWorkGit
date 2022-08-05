@@ -91,10 +91,9 @@ public class Main {
         for (int i = 0; i < purchasesSale.length; i++) {
             if (purchasesSale[i] > 0) {
                 sumSale = ((3 * (purchasesSale[i] / 3) * pricesSale[i]) / 3 * 2 + (purchasesSale[i] - 3 * (purchasesSale[i] / 3)) * pricesSale[i]);
-
                 System.out.println(sale[i] + " по " + pricesSale[i] + " руб. - " + purchasesSale[i] + " шт. (на " + sumSale + " руб.)");
+                sumPrSale += sumSale;
             }
-            sumPrSale += sumSale;
         }
         System.out.println("всего товаров по акции на сумму: " + sumPrSale + " руб.");
         System.out.println();
