@@ -1,38 +1,52 @@
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        //TODO ТОВАРЫ БЕЗ АКЦИИ:
         String[] shop = {"Булка", "Сыр", "Молоко"};
-        int[] prices = {50, 100, 70};
-        int[] purchases = new int[3];
-        int sumProduct = 0;
+        int[] prices = {50, 100, 70}; //цены
+        int[] purchases = new int[shop.length]; //массив для выбранных товаров
+        int sumProducts = 0; //стоимость покупки без акции
 
-        System.out.println("Список товаров, доступных к покупке:");
+        //TODO ТОВАРЫ ПО АКЦИИ:
+        String[] sale = {"Кофе", "Мидии", "Шоколад"};
+        int[] pricesSale = {1000, 500, 300}; //цены
+        int[] purchasesSale = new int[sale.length]; //массив для выбранных товаров по акции
+        int sumSale = 0; // стоимость товара по скидке
+        int sumPrSale = 0; //стоимость покупки по акции
+
+        //TODO ВЫВОД ПРЕДЛОЖЕНИЯ НА ЭКРАН:
+        System.out.println("список товаров, доступных к покупке:");
         for (int i = 0; i < shop.length; i++) {
             System.out.println((i + 1) + "\t" + shop[i] + "\t" + prices[i] + " руб.");
         }
+        System.out.println("товары по акции (три по цене двух): ");
+        for (int j = 0; j < sale.length; j++) {
+            System.out.println((j + 4) + "\t" + sale[j] + "\t" + pricesSale[j] + " руб.");
+        }
 
+        //TODO ВВОД С КОНСОЛИ + ПРООВЕРКА ДАННЫХ:
         while (true) {
-            System.out.println("Веди номер товара и его количество (через пробел); " +
+            System.out.println("веди номер товара и его количество (через пробел); " +
                     "для подсчета результатов и выхода набери end.");
             String input = scanner.nextLine();
             if ("end".equals(input)) {
                 break;
             }
-            String[] choice = new String[0];
-            choice = input.split(" ");
+            String[] choice = input.split(" ");
 
             //TODO если массив не из двух чисел:
             if (choice.length != 2) {
                 System.out.println("надо вводить два числа, вы ввели: " + input);
                 continue;
             }
+            int cellNum; // введённый номер продукта -1
+            int cellNumSale; //введённый номер продукта по скидке
+            int productCount; //введённое кол-во выбранных продуктов
+
             //TODO если введены не цифры а буквы:
-            int cellNum;
-            int productCount;
             try {
                 cellNum = Integer.parseInt(choice[0]) - 1;
                 productCount = Integer.parseInt(choice[1]);
@@ -41,25 +55,49 @@ public class Main {
                 continue;
             }
             //TODO если введённые числа не подходят по условиям:
-            if (cellNum < 0 || cellNum >= shop.length) {
+            if (cellNum < 0 || cellNum >= (shop.length + sale.length)) {
                 System.out.println("нет товара под таким номером");
                 continue;
             }
+            //TODO если кол-во продукта < 0:
             if (productCount < 0) {
                 System.out.println("кол-во товара меньше ноля - недопустимо");
                 continue;
             }
-            purchases[cellNum] += productCount;
 
+            //TODO увеличение массивов с количеством продуктов:
+            if (cellNum < shop.length) {
+                purchases[cellNum] += productCount;
+            } else {
+                cellNumSale = cellNum - shop.length;
+                purchasesSale[cellNumSale] += productCount;
+            }
         }
-        System.out.println("В вашей корзине: ");
-        for (int i = 0; i < shop.length; i++) {
+
+        //TODO ПОДСЧЕТ КОЛИЧЕСТВА И СУММЫ ПОКУПКИ БЕЗ АКЦИИ:
+        System.out.println("в вашей корзине: ");
+        for (int i = 0; i < purchases.length; i++) {
             if (purchases[i] > 0) {
                 System.out.println(shop[i] + " по " + prices[i] + " руб. - "
                         + purchases[i] + " шт. (на " + (purchases[i] * prices[i]) + " руб.)");
-                sumProduct += (purchases[i] * prices[i]);
+                sumProducts += (purchases[i] * prices[i]);
             }
         }
-        System.out.println("Общая стоимость: " + sumProduct + " руб.");
+        System.out.println("всего товаров без акции на сумму: " + sumProducts);
+        System.out.println();
+
+        //TODO ПОДСЧЕТ КОЛИЧЕСТВА И СУММЫ ПОКУПКИ ПО АКЦИИ:
+        System.out.println("товары по акции: ");
+        for (int i = 0; i < purchasesSale.length; i++) {
+            if (purchasesSale[i] > 0) {
+                sumSale = ((3 * (purchasesSale[i] / 3) * pricesSale[i]) / 3 * 2 + (purchasesSale[i] - 3 * (purchasesSale[i] / 3)) * pricesSale[i]);
+
+                System.out.println(sale[i] + " по " + pricesSale[i] + " руб. - " + purchasesSale[i] + " шт. (на " + sumSale + " руб.)");
+            }
+            sumPrSale += sumSale;
+        }
+        System.out.println("всего товаров по акции на сумму: " + sumPrSale + " руб.");
+        System.out.println();
+        System.out.println("общая стоимость покупки: " + (sumProducts + sumPrSale) + " руб.");
     }
 }
