@@ -14,7 +14,7 @@ public class Main {
         String[] sale = {"Кофе", "Мидии", "Шоколад"};
         int[] pricesSale = {1000, 500, 300}; //цены
         int[] purchasesSale = new int[sale.length]; //массив для выбранных товаров по акции
-        int sumSale = 0; // стоимость товара по скидке
+        int sumSale; // стоимость товара по скидке
         int sumPrSale = 0; //стоимость покупки по акции
 
         //TODO ВЫВОД ПРЕДЛОЖЕНИЯ НА ЭКРАН:
@@ -26,11 +26,12 @@ public class Main {
         for (int j = 0; j < sale.length; j++) {
             System.out.println((j + 4) + "\t" + sale[j] + "\t" + pricesSale[j] + " руб.");
         }
-
-        //TODO ВВОД С КОНСОЛИ + ПРООВЕРКА ДАННЫХ:
+        int cellNum; // введённый номер продукта -1
+        int cellNumSale; //введённый номер продукта по скидке
+        int productCount; //введённое кол-во выбранных продуктов
+        //TODO ВВОД С КОНСОЛИ + ПРОВЕРКА ДАННЫХ:
         while (true) {
-            System.out.println("веди номер товара и его количество (через пробел); " +
-                    "для подсчета результатов и выхода набери end.");
+            System.out.println("Введи номер товара и его количество (через пробел); " + "для подсчета результатов и выхода набери end.");
             String input = scanner.nextLine();
             if ("end".equals(input)) {
                 break;
@@ -42,9 +43,6 @@ public class Main {
                 System.out.println("надо вводить два числа, вы ввели: " + input);
                 continue;
             }
-            int cellNum; // введённый номер продукта -1
-            int cellNumSale; //введённый номер продукта по скидке
-            int productCount; //введённое кол-во выбранных продуктов
 
             //TODO если введены не цифры а буквы:
             try {
@@ -59,18 +57,34 @@ public class Main {
                 System.out.println("нет товара под таким номером");
                 continue;
             }
-            //TODO если кол-во продукта < 0:
-            if (productCount < 0) {
-                System.out.println("кол-во товара меньше ноля - недопустимо");
-                continue;
-            }
-
-            //TODO увеличение массивов с количеством продуктов:
             if (cellNum < shop.length) {
-                purchases[cellNum] += productCount;
+                if (productCount == 0) {
+                    System.out.println("Следующий товар был удален из корзины: " + shop[cellNum]);purchases[cellNum] = 0;
+                }
+
+                //TODO изменение количества прордуктов в корзине:
+                if (productCount < 0) {
+                    System.out.println("Товар " + shop[cellNum] + " в корзине будет уменьшен на " + -productCount + " шт.");
+                }
+                if ((purchases[cellNum] + productCount) < 0) {
+                    purchases[cellNum] = 0;
+                } else {
+                    purchases[cellNum] += productCount;
+                }
             } else {
                 cellNumSale = cellNum - shop.length;
-                purchasesSale[cellNumSale] += productCount;
+                if (productCount == 0) {
+                    System.out.println("Следующий товар был удален из корзины: " + sale[cellNumSale]);
+                    purchasesSale[cellNumSale] = 0;
+                }
+                if (productCount < 0) {
+                    System.out.println("Товар " + sale[cellNumSale] + " в корзине будет уменьшен на " + -productCount + " шт.");
+                }
+                if ((purchasesSale[cellNumSale] + productCount) < 0) {
+                    purchasesSale[cellNumSale] = 0;
+                } else {
+                    purchasesSale[cellNumSale] += productCount;
+                }
             }
         }
 
@@ -83,7 +97,7 @@ public class Main {
                 sumProducts += (purchases[i] * prices[i]);
             }
         }
-        System.out.println("всего товаров без акции на сумму: " + sumProducts);
+        System.out.println("всего товаров без акции на сумму: " + sumProducts + " руб.");
         System.out.println();
 
         //TODO ПОДСЧЕТ КОЛИЧЕСТВА И СУММЫ ПОКУПКИ ПО АКЦИИ:
