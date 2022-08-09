@@ -59,11 +59,10 @@ public class Main {
             }
             if (cellNum < shop.length) {
                 if (productCount == 0) {
-                    System.out.println("Следующий товар был удален из корзины: " + shop[cellNum]);
-                    purchases[cellNum] = 0;
+                    System.out.println("Следующий товар был удален из корзины: " + shop[cellNum]);purchases[cellNum] = 0;
                 }
 
-                //TODO если кол-во продукта < 0:
+                //TODO изменение количества прордуктов в корзине:
                 if (productCount < 0) {
                     System.out.println("Товар " + shop[cellNum] + " в корзине будет уменьшен на " + -productCount + " шт.");
                 }
@@ -87,13 +86,6 @@ public class Main {
                     purchasesSale[cellNumSale] += productCount;
                 }
             }
-//            //TODO увеличение массивов с количеством продуктов:
-//            if (cellNum < shop.length) {
-//                purchases[cellNum] += productCount;
-//            } else {
-//                cellNumSale = cellNum - shop.length;
-//                purchasesSale[cellNumSale] += productCount;
-//            }
         }
 
         //TODO ПОДСЧЕТ КОЛИЧЕСТВА И СУММЫ ПОКУПКИ БЕЗ АКЦИИ:
